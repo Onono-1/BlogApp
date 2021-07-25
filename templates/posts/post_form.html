@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+        <div class="row" style="place-content: center;">
+            <div class="col-12 col-md-8 col-lg-6">
+                <h1 class="text-center">New Post</h1>
+                <form action="">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="" id="title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formFile" class="form-label mt-4">Thumbnail Image</label>
+                        <input class="form-control" type="file" id="formFile">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formFile" class="form-label mt-4">Banner Image</label>
+                        <input class="form-control" type="file" id="formFile">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleTextarea" class="form-label mt-4">Content</label>
+                        <textarea class="form-control" id="exampleTextarea" rows="7"></textarea>
+                    </div>
+
+                    <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Post</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+    
+

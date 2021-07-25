@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}| Users{% endblock %}
+{% block content %}
+<div class="container mt-5 post-list">
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-3 mb-5">
+                <form class="d-flex" action="{% url 'user-search' %}">
+                    <input class="form-control " type="text" name="query" placeholder="Search Username">
+                    <button class="btn btn-secondary" type="submit">Search</button>
+                </form>
+
+                <div class="card text-white  mt-3">
+                    <div class="card-header">Popular</div>
+                    <div class="card-body">
+                        {% for profile in popular %}
+                            <div class="d-flex post mb-3">
+                                <div class="flex-shrink-0">
+                                    {% if profile.image %}
+                                    <img class="mr-3 img-fluid post-thumb d-none d-md-flex rounded-circle"src="{{profile.image.url}}" alt="image" width="50px">
+                                    {% else %}
+                                    <img class="mr-3 img-fluid post-thumb d-none d-md-flex rounded-circle"src="{% static 'img/default.png' %}" alt="image" width="50px">
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h5 class="title mb-1"><a href="{% url 'profile-detail' username=profile %}">{{profile}}</a></h5>
+                                    <div class="meta mb-1">
+                                        Posts <i class="badge bg-secondary">{{profile.post_count}}</i>
+                                        Comments <i class="badge bg-secondary">{{profile.comment_count}}</i>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-8 col-lg-6">
+                {% if profiles %}
+                {% for profile in profiles %}
+                <div class="d-flex post mb-3">
+                    <div class="flex-shrink-0">
+                        {% if profile.image %}
+                        <img class="mr-3 img-fluid post-thumb d-none d-md-flex rounded-circle" src="{{profile.image.url}}"
+                            alt="image">
+                        {% else %}
+                        <img class="mr-3 img-fluid post-thumb d-none d-md-flex rounded-circle" src="{% static 'img/default.png' %}"
+                            alt="image">
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="title mb-1"><a href="{% url 'profile-detail' username=profile %}">{{profile}}</a></h5>
+                        <div class="meta mb-1">
+                            Posts <i class="badge bg-secondary">{{profile.post_count}}</i>
+                            Comments <i class="badge bg-secondary">{{profile.comment_count}}</i>
+                        </div>
+                        <div class="intro">{{profile.bio|truncatechars:120}}</div>
+                        <a class="more-link" href="{% url 'profile-detail' username=profile %}">See more →</a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No users to show</p>
+                {% endif %}
+
+
+                <div class="d-flex gap-0 mb-3">
+                {% if profiles.has_previous  and not profiles.has_next %}
+                    <a href="?page={{profiles.previous_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Previous                    
+                    </a>
+                    {% endif %}
+                    {% if profiles.has_next and not profiles.has_previous %}
+                    <a href="?page={{profiles.next_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+
+
+                    {% if profiles.has_next and profiles.has_previous %}
+                    <a href="?page={{profiles.previous_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Previous                    
+                    </a>
+                    <a href="?page={{profiles.next_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="col-12 col-lg-3">
+                <div class="card text-white">
+                    <div class="card-header">Recent</div>
+                    <div class="card-body">
+                        {% if recent %}
+                        {% for profile in recent %}
+                        <div class="d-flex post mb-3">
+                            <div class="flex-shrink-0">
+                                {% if profile.image %}
+                        <img class="mr-3 img-fluid post-thumb d-none d-md-flex rounded-circle" src="{{profile.image.url}}"
+                            alt="image" width="50px">
+                        {% else %}
+                        <img class="mr-3 img-fluid post-thumb d-none d-md-flex rounded-circle" src="{% static 'img/default.png' %}"
+                            alt="image" width="50px">
+                        {% endif %}
+
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="title mb-1"><a href="{% url 'profile-detail' username=profile %}">{{profile}}</a></h5>
+                                <div class="meta mb-1">
+                                    Posts <i class="badge bg-secondary">{{profile.post_count}}</i>
+                                    Comments <i class="badge bg-secondary">{{profile.comment_count}}</i>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>No users to show</p>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+    

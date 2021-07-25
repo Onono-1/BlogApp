@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}| {{profile}} Update{% endblock %}
+{% block content %}
+ <div class="container mt-5">
+        <div class="row" style="place-content: center;">
+            <div class="col-12 col-md-8 col-lg-6">
+                <h1 class="text-center">Update Profile</h1>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="formFile" class="form-label mt-4">Profile Image</label>
+                        {{form.image}}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fb" class="form-label mt-4">Facebook</label>
+                        {{form.facebook}}
+                    </div>
+                    <div class="form-group">
+                        <label for="github" class="form-label mt-4">Github</label>
+                        {{form.github}}
+                    </div>
+                    <div class="form-group">
+                        <label for="youtube" class="form-label mt-4">Youtube</label>
+                        {{form.youtube}}
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="exampleTextarea" class="form-label mt-4">Bio</label>
+                        {{form.bio}}
+                    </div>
+
+                    <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Update</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+   

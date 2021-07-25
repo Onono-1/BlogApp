@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}| Posts{% endblock %}
+{% block content %}
+  <div class="container mt-5 post-list">
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-3">
+                <form class="d-flex" action="{% url 'post-search' %}">
+                    <input class="form-control " name="query" type="text" placeholder="Search Title">
+                    <button class="btn btn-secondary" type="submit">Search</button>
+                </form>
+
+                <div class="card text-white  mt-3">
+                    <div class="card-header">Popular</div>
+                    <div class="card-body">
+                        {% for post in popular %}
+                        <div class="d-flex post mb-3">
+                            <div class="flex-shrink-0">
+                                <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{post.thumbnail.url}}"
+                                    alt="image" width="50px">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="title mb-1"><a href="{% url 'post-detail' pk=post.pk slug=post.slug %}">{{post.title|truncatechars:12}}</a></h5>
+                                <div class="meta mb-1">
+                                    Comments <i class="badge bg-secondary">{{post.comment_count}}</i>
+                                </div>
+                            </div>
+                        
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+            <div class="col-12 col-md-8 col-lg-6">
+                {% if posts %}
+                {% for post in posts %}
+                <div class="d-flex post mb-3">
+                    <div class="flex-shrink-0">
+                        <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{post.thumbnail.url}}"
+                            alt="image">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="title mb-1"><a href="{% url 'post-detail' pk=post.pk slug=post.slug %}">{{post.title}}</a>
+                        </h5>
+                        <div class="meta mb-1"><span class="date">{{post.author}} {{post.created_date|timesince}} ago</span><a href="{% url 'post-detail' pk=post.pk slug=post.slug %}#comment"><i
+                                    class="glyphicon glyphicon-comment"></i> {{post.comment_count}}</a>
+                        </div>
+                        <div class="intro">{{post.content|truncatechars:130}}</div>
+                        <a class="more-link" href="{% url 'post-detail' pk=post.pk slug=post.slug %}">Read more →</a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No posts to show</p>
+                {% endif %}
+
+                
+
+                <div class="d-flex gap-0 mb-3">
+                {% if posts.has_previous  and not posts.has_next %}
+                    <a href="?page={{posts.previous_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Previous                    
+                    </a>
+                    {% endif %}
+                    {% if posts.has_next and not posts.has_previous %}
+                    <a href="?page={{posts.next_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+
+
+                    {% if posts.has_next and post.has_previous %}
+                    <a href="?page={{posts.previous_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Previous                    
+                    </a>
+                    <a href="?page={{posts.next_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="col-12 col-lg-3">
+                <div class="card text-white">
+                    <div class="card-header">Recent</div>
+                    <div class="card-body">
+                        {% if recent %}
+                        {% for post in recent %}
+                         <div class="d-flex post mb-3">
+                            <div class="flex-shrink-0">
+                                <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{post.thumbnail.url}}"
+                                    alt="image" width="50px">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="title mb-1"><a href="{% url 'post-detail' pk=post.pk slug=post.slug %}">{{post.title|truncatechars:12}}</a></h5>
+                                <div class="meta mb-1">
+                                    Comments <i class="badge bg-secondary">{{post.comment_count}}</i>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>No posts to show</p>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+  
+   

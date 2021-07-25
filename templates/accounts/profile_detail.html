@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}| {{profile}}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+        <div class="text-center">
+            {% if profile.image %}
+            <img src="{{profile.image.url}}" class="rounded-circle img-fluid" style="max-width: 200px;" alt="Image">
+            <br>
+            {% else %}
+            <img src="{% static 'img/default.png' %}" class="rounded-circle img-fluid" style="max-width: 200px;" alt="Image">
+            <br>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            {% if request.user == profile.user %}
+            <a href="{% url 'profile-update' username=profile %}"><i class="glyphicon glyphicon-edit"></i> Update Profile</a>
+            {% endif %}
+
+            {% endif %}
+            
+            
+            <h3>@{{profile}}</h3>
+
+            <p class="h5">
+                {% if profile.facebook %}
+                 <a href="{{profile.facebook}}" target="_blank">
+                   <i class="fa fa-facebook-square"></i>  
+                 </a>
+                 
+                {% endif %}
+                {% if profile.github %}
+                 <a href="{{profile.github}}" target="_blank">
+                     <i class="fa fa-github-square"></i>
+                 </a>
+                {% endif %}
+                {% if profile.youtube %}
+                 <a href="{{profile.youtube}}" target="_blank">
+                     <i class="fa fa-youtube-play"></i>
+                 </a>
+                {% endif %}                                        
+            </p>
+        </div>
+
+        <div class="row profile-posts">
+            <!-- <div class="col-3 col-md-0"></div> -->
+            <div class="col-12 col-md-8 col-lg-6">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#posts">
+                            Posts
+                            <span class="badge bg-secondary">{{profile.post_count}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#comments">
+                            Comments
+                            <span class="badge bg-secondary">{{profile.comment_count}}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#bio">Bio</a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active show mt-3" id="posts">
+                    {% if posts %}
+                {% for post in posts %}
+                <div class="d-flex post mb-3">
+                    <div class="flex-shrink-0">
+                        <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{post.thumbnail.url}}"
+                            alt="image">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="title mb-1"><a href="{% url 'post-detail' pk=post.pk slug=post.slug %}">{{post.title}}</a>
+                        </h5>
+                        <div class="meta mb-1"><span class="date">Published {{post.created_date|timesince}} ago</span><a href="#"><i
+                                    class="glyphicon glyphicon-comment"></i> {{post.comment_count}}</a>
+                        </div>
+                        <div class="intro">{{post.content|truncatechars:130}}</div>
+                        <a class="more-link" href="{% url 'post-detail' pk=post.pk slug=post.slug %}">Read more →</a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No posts to show</p>
+                {% endif %}
+
+                        <div class="d-flex gap-0 mb-3">
+                {% if posts.has_previous  and not posts.has_next %}
+                    <a href="?page={{posts.previous_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Previous                    
+                    </a>
+                    {% endif %}
+                    {% if posts.has_next and not posts.has_previous %}
+                    <a href="?page={{posts.next_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+
+
+                    {% if posts.has_next and post.has_previous %}
+                    <a href="?page={{posts.previous_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Previous                    
+                    </a>
+                    <a href="?page={{posts.next_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+                </div>
+
+                    </div>
+
+                    <div class="tab-pane fade mt-3" id="comments">
+                        {% if comments %}
+                        {% for comment in comments %}
+                        <div class="d-flex post mb-3">
+                            <div class="flex-shrink-0">
+                                <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{comment.post.thumbnail.url}}"
+                                    alt="image">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="title mb-1"><a href="{% url 'post-detail' pk=comment.post.pk slug=comment.post.slug %}#comment">{{comment.post.title}}</a></h5>
+                                <div class="meta mb-1"><span class="date">Commented {{comment.created_date|timesince}} ago</span>
+                                </div>
+                                <div class="intro">{{comment.content}}</div>
+                                <a class="more-link" href="{% url 'post-detail' pk=comment.post.pk slug=comment.post.slug %}#comment">Read more →</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else%}
+                        <p>No comments to show.</p>
+                        {% endif %}
+
+                        <div class="d-flex gap-0 mb-3">
+                {% if comments.has_previous  and not comments.has_next %}
+                    <a href="?page={{comments.previous_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Previous                    
+                    </a>
+                    {% endif %}
+                    {% if comments.has_next and not comments.has_previous %}
+                    <a href="?page={{comments.next_page_number}}" class="btn btn-md btn-primary" style="width: 100%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+
+
+                    {% if comments.has_next and comments.has_previous %}
+                    <a href="?page={{comments.previous_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Previous                    
+                    </a>
+                    <a href="?page={{comments.next_page_number}}" class="btn btn-md btn-primary" style="width: 50%;">
+                        Next                    
+                    </a>
+                    {% endif %}
+                </div>
+
+                    </div>
+
+                    <div class="tab-pane fade mt-3" id="bio">
+                        {{profile.bio}}
+
+                    </div>
+                </div>
+                <!-- <div class="col-3"></div> -->
+            </div>
+
+        </div>
+{% endblock %}
+
+    
